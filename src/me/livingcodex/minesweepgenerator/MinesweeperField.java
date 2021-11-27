@@ -9,7 +9,7 @@ public class MinesweeperField {
     public MinesweeperField(int width, int height) {
         this.width = width;
         this.height = height;
-        this.field = new int[width][height];
+        this.field = new int[height][width];
     }
 
     public void generateField(Bomb[] bombLocations) {
@@ -19,7 +19,7 @@ public class MinesweeperField {
         for (Bomb bomb : bombLocations) {
             int x = bomb.getX();
             int y = bomb.getY();
-            field[x][y] = -1;
+            field[y][x] = -1;
         }
 
         for (Bomb bomb : bombLocations) {
@@ -34,35 +34,59 @@ public class MinesweeperField {
                     if (offsetX < 0 || offsetX >= width) continue;
                     if (offsetY < 0 || offsetY >= height) continue;
 
-                    int n = field[x + i][y + j];
+                    int n = field[y + j][x + i];
                     if (n == -1) continue;
 
-                    field[x + i][y + j]++;
+                    field[y + j][x + i]++;
                 }
             }
         }
     }
 
     public String[] field2Text() {
-        int[][] yx = new int[height][width];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                yx[y][x] = field[x][y];
-            }
-        }
-
         String[] lines = new String[height];
         for (int i = 0; i < height; i++) {
-            int[] intLine = yx[i];
+            int[] intLine = field[i];
             StringBuilder line = new StringBuilder(width);
             for (int n : intLine) {
                 if (n == -1) {
                     line.append("█");
                 } else if (n == 0) {
                     line.append(" ");
-                }else{
+                } else {
                     line.append(n);
                 }
+            }
+            lines[i] = line.toString();
+        }
+
+        return lines;
+    }
+
+    public String[] createDiscordField() {
+        String[] lines = new String[height];
+        for (int i = 0; i < height; i++) {
+            int[] intLine = field[i];
+            StringBuilder line = new StringBuilder(width * 5);
+            for (int n : intLine) {
+                line.append("||");
+                String symbol = switch (n) {
+                    case -1 -> ":fire:";
+                    case 0 -> ":nix:";
+                    case 1 -> ":one:";
+                    case 2 -> ":two:";
+                    case 3 -> ":three:";
+                    case 4 -> ":four:";
+                    case 5 -> ":five:";
+                    case 6 -> ":six:";
+                    case 7 -> ":seven:";
+                    case 8 -> ":eight:";
+
+                    default -> "ERROR";
+                };
+
+                line.append(symbol);
+                line.append("||");
             }
             lines[i] = line.toString();
         }
@@ -73,7 +97,7 @@ public class MinesweeperField {
     private void clearField() {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                field[x][y] = 0;
+                field[y][x] = 0;
             }
         }
     }

@@ -9,15 +9,15 @@ public class Main {
 
     public static void main(String[] args) {
         final int fieldWidth = 8;
-        final int fieldHeight = 4;
-        final int bombs = 8;
+        final int fieldHeight = 10;
+        final int bombs = 10;
 
         MinesweeperField field = new MinesweeperField(fieldWidth, fieldHeight);
 
         Bomb[] bombLocations = generateBombs(fieldWidth, fieldHeight, bombs);
         field.generateField(bombLocations);
 
-        String[] s = field.field2Text();
+        String[] s = field.createDiscordField();
         for (String s0 : s) {
             System.out.println(s0);
         }
