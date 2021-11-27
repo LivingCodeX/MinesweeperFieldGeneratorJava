@@ -1,8 +1,9 @@
 package me.livingcodex.minesweepgenerator;
 
-import sun.plugin.dom.exception.InvalidStateException;
-
-import java.util.*;
+import java.security.InvalidParameterException;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 public class Main {
 
@@ -23,13 +24,14 @@ public class Main {
     }
 
     private static Bomb[] generateBombs(int fieldWidth, int fieldHeight, int bombs) {
-        if (fieldWidth <= 0) throw new InvalidStateException("The field width has to be greater than 0.");
-        if (fieldHeight <= 0) throw new InvalidStateException("The field width has to be greater than 0.");
+        if (fieldWidth <= 0) throw new InvalidParameterException("The field width has to be greater than 0.");
+        if (fieldHeight <= 0) throw new InvalidParameterException("The field width has to be greater than 0.");
         if (bombs <= 0) return new Bomb[0];
 
         int totalSpots = fieldWidth * fieldHeight;
 
-        if (totalSpots < bombs) throw new InvalidStateException("There field (" + totalSpots + ") is too small for " + bombs + " bombs.");
+        if (totalSpots < bombs)
+            throw new InvalidParameterException("There field (" + totalSpots + ") is too small for " + bombs + " bombs.");
 
         if (totalSpots == bombs) {
             Bomb[] bombLocations = new Bomb[totalSpots];
